@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Recordatorio de Cumpleaños</title>
+</head>
+
+<body style="margin:0; padding:0; background-color:#f2f2f2; font-family:Arial, Helvetica, sans-serif;">
+
+    <table width="100%" cellpadding="0" cellspacing="0" style="padding:30px; background-color:#f2f2f2;">
+        <tr>
+            <td align="center">
+
+                <table width="600" cellpadding="0" cellspacing="0"
+                    style="background-color:#ffffff; border-radius:8px; padding:30px;">
+
+                    <!-- Logos -->
+                    <tr>
+                        <td align="center" style="padding-bottom:25px;">
+                            <img src="https://scontent.fsap12-2.fna.fbcdn.net/v/t39.30808-6/417423555_365728089493267_5615779318562323802_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=LCx5JDs6lvsQ7kNvwEXnLH5&_nc_oc=AdnWlsxHlwEn2o7LP7O3hKCjIyUlb8DqsEpA3dwpSQFriaMHLdmyVcGuNFVR-BXfqqA&_nc_zt=23&_nc_ht=scontent.fsap12-2.fna&_nc_gid=WEZop-ZKN0FLeWEJLm_hxw&_nc_ss=8&oh=00_Afyk1xnT7Y4iFcANGWl9DmTntx0oQ_NhREaGbjz2RiRIeg&oe=69B17C50" alt="Logo 1" width="120" height="120" style="margin-right:20px;">
+                            <img src="https://scouts.es/wp-content/uploads/2012/05/lis.jpg" alt="Logo 2" width="100" height="120">
+                        </td>
+                    </tr>
+
+                    <!-- Título -->
+                    <tr>
+                        <td style="text-align:center; padding-bottom:20px;">
+                            <h2 style="margin:0; color:#2c3e50;">🎉 Recordatorio de Cumpleaños</h2>
+                        </td>
+                    </tr>
+
+                    <!-- Contenido -->
+                    <tr>
+                        <td style="color:#333333; font-size:16px; line-height:1.6;">
+
+                            <p>Hola,</p>
+
+                            <p>
+                                Les informamos que el día de hoy <strong th:text="${date}">viernes 13 de cualquiermes del 2026</strong> celebran su
+                                cumpleaños las siguientes personas:
+                            </p>
+
+                            <table width="100%" cellpadding="8" cellspacing="0"
+                                style="margin-top:15px; margin-bottom:20px; border-collapse:collapse;">
+                                <tr style="background-color:#f7f7f7;">
+                                    <td style="border:1px solid #e5e5e5;"><strong>Nombre</strong></td>
+                                    <td style="border:1px solid #e5e5e5;"><strong>Edad</strong></td>
+                                </tr>
+
+                                <tr th:each="person : ${birthdayPersons}">
+                                    <td style="border:1px solid #e5e5e5;" th:text="${person.name}">Persona 1</td>
+                                    <td style="border:1px solid #e5e5e5;" th:text="${person.age}">XX años</td>
+                                </tr>
+
+                            </table>
+
+                            <p>
+                                Les recordamos que pueden felicitarlos ya sea a través del chat o durante la reunión del
+                                sábado.
+                            </p>
+
+                            <p style="margin-top:25px;">
+                                Saludos cordiales.
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td
+                            style="padding-top:25px; border-top:1px solid #eeeeee; text-align:center; font-size:12px; color:#888888;">
+                            Este es un correo automático generado por el sistema de recordatorios.<br>
+                            Por favor, no responder a este mensaje.
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+
+</html>
