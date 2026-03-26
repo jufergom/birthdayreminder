@@ -2,12 +2,15 @@ package com.gruposcout21.birthdayreminder.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import com.gruposcout21.birthdayreminder.entity.Contact;
@@ -63,8 +66,11 @@ public class BirthdayServiceImpl implements BirthdayService {
             .map(Contact::getEmail)
             .toList();
 
+        Map<String, Resource> resources = new HashMap<>();
+        resources.put("gs21-logo", new ClassPathResource("static/images/logo-gs21.jpg"));
+
         try {
-            mailService.sendHtml(contactEmails, "Cumpleaños Clan Atlantis hoy " + spanishFormattedTodayDate, htmlEmailBody);
+            mailService.sendHtml(contactEmails, "Cumpleaños Clan Atlantis hoy " + spanishFormattedTodayDate, htmlEmailBody, resources);
         }
         catch (MessagingException e) {
             logger.error(e.getMessage(), e);

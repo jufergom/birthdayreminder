@@ -1,7 +1,9 @@
 package com.gruposcout21.birthdayreminder.service;
 
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.core.io.Resource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -26,12 +28,19 @@ public class MailService {
         mailSender.send(message);
     }
 
-    public void sendHtml(List<String> to, String subject, String htmlBody) throws MessagingException {
+    public void sendHtml(List<String> to, String subject, String htmlBody, Map<String, Resource> inlineResources) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setTo(to.toArray(String[]::new));
         helper.setSubject(subject);
         helper.setText(htmlBody, true);
+
+        if (inlineResources != null) {
+            for (Map.Entry<String, Resource> entry : inlineResources.entrySet()) {
+                helper.addInline(entry.getKey(), entry.getValue());
+            }
+        }
+
         mailSender.send(message);
     }
 }
