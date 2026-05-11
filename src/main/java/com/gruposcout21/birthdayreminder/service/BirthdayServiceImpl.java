@@ -1,80 +1,35 @@
 package com.gruposcout21.birthdayreminder.service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.gruposcout21.birthdayreminder.entity.Contact;
 import com.gruposcout21.birthdayreminder.entity.Person;
-import com.gruposcout21.birthdayreminder.repository.ContactRepository;
 import com.gruposcout21.birthdayreminder.repository.PersonRepository;
-
-import jakarta.mail.MessagingException;
 
 @Service
 public class BirthdayServiceImpl implements BirthdayService {
 
     private PersonRepository personRepository;
 
-    private ContactRepository contactRepository;
+    private NotificationService notificationService;
 
-    private TemplateService templateService;
-
-    private MailService mailService;
-
-    private static final Logger logger = LoggerFactory.getLogger(BirthdayServiceImpl.class);
-
-    public BirthdayServiceImpl(PersonRepository personRepository, ContactRepository contactRepository, TemplateService templateService, MailService mailService) {
+    public BirthdayServiceImpl(PersonRepository personRepository, @Qualifier("discordNotificationService") NotificationService notificationService) {
         this.personRepository = personRepository;
-        this.contactRepository = contactRepository;
-        this.templateService = templateService;
-        this.mailService = mailService;
+        this.notificationService = notificationService;
     }
 
     @Override
-    public void sendBirthdayReminders() {
-        Locale spanishLocale = Locale.of("es", "ES");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-                "EEEE d 'de' MMMM 'del' yyyy", spanishLocale
-        );
-
+    public void notifyTodayBirthdays() {
         LocalDate today = LocalDate.now();
-        String spanishFormattedTodayDate = today.format(formatter);
         List<Person> birthdayPersons = personRepository.findByBirthday(today.getMonthValue(), today.getDayOfMonth());
-
+        birthdayPersons.add(new Person("El chavo del 8", LocalDate.of(1998, today.getMonthValue(), today.getDayOfMonth())));
         if (birthdayPersons.isEmpty()) {
             return;
         }
 
-        Map<String, Object> variables = Map.of(
-            "birthdayPersons", birthdayPersons,
-            "today", spanishFormattedTodayDate
-        );
-        String htmlEmailBody = templateService.renderTemplate("birthday-reminder.html", variables);
-
-        List<Contact> contacts = contactRepository.findAll();
-        List<String> contactEmails = contacts.stream()
-            .map(Contact::getEmail)
-            .toList();
-
-        Map<String, Resource> resources = new HashMap<>();
-        resources.put("gs21-logo", new ClassPathResource("static/images/logo-gs21.jpg"));
-
-        try {
-            mailService.sendHtml(contactEmails, "Cumpleaños Clan Atlantis hoy " + spanishFormattedTodayDate, htmlEmailBody, resources);
-        }
-        catch (MessagingException e) {
-            logger.error(e.getMessage(), e);
-        }
-
+        notificationService.notifyBirthdays(birthdayPersons);
     }
 }

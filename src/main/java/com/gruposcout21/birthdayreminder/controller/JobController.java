@@ -17,7 +17,7 @@ public class JobController {
 
     @PostMapping("/jobs/birthday-reminder")
     public ResponseEntity<Void> sendBirthdayReminder() {
-        birthdayService.sendBirthdayReminders();
+        birthdayService.notifyTodayBirthdays();
         return ResponseEntity.ok().build();
     }
 
