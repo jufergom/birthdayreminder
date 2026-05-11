@@ -62,7 +62,7 @@ public class DiscordNotificationService implements NotificationService {
                 .toBodilessEntity();
         
         if (!response.getStatusCode().is2xxSuccessful()) {
-            logger.error("Error al enviar notificación a Discord: " + response.getStatusCode());
+            logger.error("Error sending notification to Discord: " + response.getStatusCode());
         }
     }
 }

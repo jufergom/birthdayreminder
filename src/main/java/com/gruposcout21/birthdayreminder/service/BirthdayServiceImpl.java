@@ -25,7 +25,6 @@ public class BirthdayServiceImpl implements BirthdayService {
     public void notifyTodayBirthdays() {
         LocalDate today = LocalDate.now();
         List<Person> birthdayPersons = personRepository.findByBirthday(today.getMonthValue(), today.getDayOfMonth());
-        birthdayPersons.add(new Person("El chavo del 8", LocalDate.of(1998, today.getMonthValue(), today.getDayOfMonth())));
         if (birthdayPersons.isEmpty()) {
             return;
         }
